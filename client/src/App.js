@@ -35,7 +35,8 @@ const App = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1', {
+      // const response = await fetch('http://localhost:8000/api/v1', {
+        const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,15 +61,28 @@ const App = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <FilterPanel
-        onFilterChange={handleFilterChange}
-        onSearch={() => handleSearch()} // Invoke handleSearch without parameters
-        onDropdown={handleDropdown}
-        dropdowns={dropdowns}
-      />
-      <ResultsPanel results={results} totalCount={totalCount} />
+    <div className="flex flex-col h-screen">
+      <header className="bg-indigo-600  hover:bg-indigo-700 p-3 text-white text-xl">
+        Apollo Filter Flow
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="w-1/4 bg-gray-100 p-4 overflow-y-auto">
+          {/* The filter panel will take the full width on mobile and 1/4th on larger screens */}
+          <FilterPanel
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onSearch={() => handleSearch()} // Invoke handleSearch without parameters
+            onDropdown={handleDropdown}
+            dropdowns={dropdowns}
+          />
+        </aside>
+        <main className="flex-1 overflow-hidden">
+
+          <ResultsPanel results={results} totalCount={totalCount} />
+        </main>
+      </div>
     </div>
+
   );
 };
 
