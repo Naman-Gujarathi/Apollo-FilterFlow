@@ -60,7 +60,7 @@ const App = () => {
   };
 
   return (
-    <div className="app">
+    <div className="container mx-auto p-4">
       <FilterPanel
         onFilterChange={handleFilterChange}
         onSearch={() => handleSearch()} // Invoke handleSearch without parameters

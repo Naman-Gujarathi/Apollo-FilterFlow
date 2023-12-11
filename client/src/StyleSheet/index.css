@@ -1,4 +1,4 @@
-.dropdown {
+/* .dropdown {
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
@@ -15,4 +15,9 @@
 
 .dropdown div:hover {
   background-color: #f1f1f1;
-}
+} */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
