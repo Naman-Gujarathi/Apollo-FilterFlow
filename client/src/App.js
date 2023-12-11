@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import FilterPanel from './Filters/FilterPanel';
 import ResultsPanel from './Filters/ResultsPanel';
 
-
 const App = () => {
   const [filters, setFilters] = useState({
     location: '',
@@ -20,7 +19,6 @@ const App = () => {
 
   const handleFilterChange = (key, value) => {
     setFilters({ ...filters, [key]: value });
-    // Hide the dropdown after selection
     setDropdowns({ ...dropdowns, [key]: false });
   };
 
@@ -29,35 +27,43 @@ const App = () => {
   };
 
   const handleSearch = async () => {
-    // Replace with actual data fetching logic
-    const mockResults = [
-      {
-        name: 'John Doe',
-        title: 'Software Engineer',
-        company: 'Tech Corp',
-        location: 'San Francisco, CA',
-        quickActions: 'Email, Call',
-        // ...other properties
-      },
-      {
-        name: 'Jane Smith',
-        title: 'Product Manager',
-        company: 'Innovatech',
-        location: 'New York, NY',
-        quickActions: 'Email, Call',
-        // ...other properties
-      },
-      // ...more mock data
-    ]; // your mock results here
-    setResults(mockResults);
-    setTotalCount(mockResults.length);
+
+    const payload = {
+      q_organization_domains: filters.company ? filters.company.split(',').map(domain => domain.trim()) : [],
+      organization_locations: filters.location ? [filters.location] : [],
+      person_titles: filters.jobTitle ? [filters.jobTitle] : [],
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/api/v1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload), // Use the filters state directly
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // setResults(data.results || []); // Use empty array as fallback
+      // setTotalCount(data.totalCount || 0); // Use 0 as fallback
+      setResults(data.people || []); // Use empty array as fallback
+      setTotalCount(data.pagination.total_entries || 0); // Use 0 as fallback
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      setResults([]); // Reset to an empty array on error
+      setTotalCount(0); // Reset to 0 on error
+    }
   };
 
   return (
     <div className="app">
       <FilterPanel
         onFilterChange={handleFilterChange}
-        onSearch={handleSearch}
+        onSearch={() => handleSearch()} // Invoke handleSearch without parameters
         onDropdown={handleDropdown}
         dropdowns={dropdowns}
       />

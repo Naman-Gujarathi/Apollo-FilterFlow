@@ -13,6 +13,7 @@ const ResultsPanel = ({ results, totalCount }) => {
             <th>Company</th>
             <th>Quick Actions</th>
             <th>Contact Location</th>
+            <th>Email</th>
             {/* Add other headers as needed */}
           </tr>
         </thead>
@@ -21,9 +22,10 @@ const ResultsPanel = ({ results, totalCount }) => {
             <tr key={index}>
               <td>{person.name}</td>
               <td>{person.title}</td>
-              <td>{person.company}</td>
-              <td>{/* Render quick actions for person */}</td>
-              <td>{person.location}</td>
+              <td>{person.organization.name}</td>
+              <td>Email, Call</td> {/* Assuming these are the quick actions */}
+              <td>{`${person.city}, ${person.state}, ${person.country}`}</td>
+              <td>{person.email}</td> {/* Assuming you have permission to display email */}
               {/* Add other cells as needed */}
             </tr>
           ))}

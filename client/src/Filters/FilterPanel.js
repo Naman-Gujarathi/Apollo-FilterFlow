@@ -23,6 +23,14 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
     onFilterChange(name, value);
   };
 
+//   const handleSearch = (filters) => {
+//     // Here you would implement your search logic using the filters
+//     // For example, you might call an API or filter data already in your state
+//     console.log('Searching with filters:', filters);
+//     // Then, you update your state with the results
+//     // setSearchResults(updatedResults);
+//   };
+
   const selectDropdownItem = (name, value) => {
     setInputValues({ ...inputValues, [name]: value });
     onFilterChange(name, value);
@@ -33,6 +41,12 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
     setDropdowns({ location: false, jobTitle: false, company: false, [name]: !dropdowns[name] });
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      onSearch(inputValues);
+    }
+  };
+
   return (
     <div className="filter-panel">
       <div>
@@ -41,6 +55,7 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
           type="text"
           value={inputValues.location}
           onChange={(e) => handleInputChange('location', e.target.value)}
+          onKeyPress={handleKeyPress}
           onFocus={() => toggleDropdown('location')}
           // onBlur={() => setDropdowns({ ...dropdowns, location: false })}
         />
@@ -60,6 +75,7 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
           type="text"
           value={inputValues.jobTitle}
           onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+          onKeyPress={handleKeyPress}
           onFocus={() => toggleDropdown('jobTitle')}
           // onBlur={() => setDropdowns({ ...dropdowns, jobTitle: false })}
         />
@@ -79,6 +95,7 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
           type="text"
           value={inputValues.company}
           onChange={(e) => handleInputChange('company', e.target.value)}
+          onKeyPress={handleKeyPress}
           onFocus={() => toggleDropdown('company')}
           // onBlur={() => setDropdowns({ ...dropdowns, company: false })}
         />
@@ -92,9 +109,10 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
           </div>
         )}
       </div>
-      <button onClick={onSearch}>Search</button>
+      <button onClick={() => onSearch(inputValues)}>Search</button>
     </div>
   );
 };
 
 export default FilterPanel;
+
