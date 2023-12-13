@@ -20,7 +20,7 @@ Day 2: Complete API endpoints for basic filters (job title).
 **Phase 2:** Frontend Development and API Integration (Day 3-4)
 **Scope:**
 - Create the React.js frontend structure.
-- Develop components for the chat facility, filters panel, and results display.
+- Develop components for the chat facility, filters panel, and searchResults display.
 - Integrate the frontend with the backend API to send and receive filter data.
 
 **Timeline:**
@@ -30,7 +30,7 @@ Day 4: Implement dynamic data display based on filters.
 **Phase 3:** Testing Application and backlog (Day 5-6)
 **Scope:**
 -  Execute comprehensive testing to validate application functionality and performance.
-Enhance API efficiency based on test results.
+Enhance API efficiency based on test searchResults.
 
 **Timeline:**
 **Day 5 & 6:** Perform testing, address identified issues, and refine the API for optimal

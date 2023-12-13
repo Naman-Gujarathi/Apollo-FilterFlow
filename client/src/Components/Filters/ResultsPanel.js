@@ -12,13 +12,13 @@ const formatCount = (num) => {
     }
 };
 
-const ResultsPanel = ({ results, totalCount }) => {
+const ResultsPanel = ({ searchResults, totalResultsCount }) => {
     return (
         <div className="flex flex-col w-full h-full">
             {/* Results count section */}
             <div className="flex justify-between items-center px-4 py-2 bg-blue-600 text-white">
                 <h2 className="text-lg font-semibold">Results</h2>
-                <span className="text-sm">Total Count: {formatCount(totalCount)}</span>
+                <span className="text-sm">Total Count: {formatCount(totalResultsCount)}</span>
             </div>
 
             {/* Table section */}
@@ -38,7 +38,7 @@ const ResultsPanel = ({ results, totalCount }) => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                        {results.map((person, index) => (
+                        {searchResults.map((person, index) => (
                             <tr key={index}>
                                 <td className="px-3 py-2 whitespace-nowrap">{person?.name ?? 'N/A'}</td>
                                 <td className="px-3 py-2 whitespace-nowrap">{person?.title ?? 'N/A'}</td>

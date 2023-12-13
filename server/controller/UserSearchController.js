@@ -1,23 +1,24 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { isValidString } from "../utilities/index.js"
-// import faker from 'faker';
+
 dotenv.config();
 
-const UserController = (req, res) => {
-    // Extract API key and URL from environment variables
+const UserSearchController = (req, res) => {
+
     const apolloApiKey = process.env.APOLLO_API_KEY;
     const apolloUrl = process.env.APOLLO_URL;
 
-    // The payload from the request body
+    // Building the request payload with a predefined page and per_page value
     const requestPayload = {
         ...req.body,
-        "page": 1,         // Add the page number here
-        "per_page": 30,    // Specify the number of rows per page
+        "page": 1,
+        "per_page": 30,
     };
 
-    console.log(requestPayload);
 
+
+    // Validating the input for specific fields
     for (let key of Object.keys(requestPayload)) {
         if (
             key === "organization_ids" ||
@@ -33,34 +34,33 @@ const UserController = (req, res) => {
         }
     }
 
-
+    // Making a post request to the Apollo API and handling the response
     axios.post(`${apolloUrl}?api_key=${apolloApiKey}`, requestPayload, {
         headers: { 'Content-Type': 'application/json' }
     })
         .then(apolloResponse => {
-            console.log(apolloResponse.data.people);
-            // Filter function that checks if a person's current employment matches the filters
+            // Additional filtering of the response data based on specific criteria
             const filterPeople = (people, filters) => {
                 return people.filter(person => {
-                    // For each filter, check if the person's data contains the filter's criteria
+
                     return Object.keys(filters).every(key => {
                         if (!filters[key]) {
-                            return true; // No filter for this key
+                            return true;
                         }
                         if (key === 'company' || key === 'jobTitle') {
-                            // Check the current employment history entry for company and job title
+
                             const currentEmployment = person.employment_history.find(e => e.current);
-                            if (!currentEmployment) return false; // No current employment found
+                            if (!currentEmployment) return false;
                             return key === 'company' ? currentEmployment.organization_name === filters[key] : currentEmployment.title === filters[key];
                         } else {
-                            // For location, check against city, state, and country
+
                             return filters[key].includes(person[key]);
                         }
                     });
                 });
             };
 
-            // Extract filters from the payload or defaults
+
             const filters = {
                 country: requestPayload.country || '',
                 state: requestPayload.state || '',
@@ -69,17 +69,17 @@ const UserController = (req, res) => {
                 jobTitle: requestPayload.jobTitle || '',
             };
 
-            // Filter the response data based on the payload filters
+
             const filteredPeople = filterPeople(apolloResponse.data.people, filters);
 
-            // Send the filtered data back to the client
+
             res.json({ ...apolloResponse.data, people: filteredPeople });
         })
         .catch(error => {
-            // Handle errors from the Apollo.io API call
+
             console.error('Error calling Apollo.io:', error);
             res.status(error.response ? error.response.status : 500).json(error.response ? error.response.data : { message: 'An error occurred when calling Apollo.io' });
         });
 };
 
-export default UserController;
+export default UserSearchController;

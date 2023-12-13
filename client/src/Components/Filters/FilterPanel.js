@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
- 
+const FilterPanel = ({ filters, onFilterChange, onSearch, setUserQuery }) => {
+
     const [inputValues, setInputValues] = useState(filters);
 
 
-    const locations = ['United States', 'Canada', 'United Kingdom', 'North America', 'Europe', 'Germany', 'Californial, US', 'San Francisco Bay Area', 'Russia', 'Texas, US', 'Greater New York City Area'];
+    const locations = ['United States', 'Canada', 'India', 'United Kingdom', 'North America', 'Europe', 'Germany', 'Californial, US', 'San Francisco Bay Area', 'Russia', 'Texas, US', 'Greater New York City Area'];
     const jobTitles = ['engineer', 'sales manager', 'product manager', 'student', 'director', 'software engineer', 'consultant', 'professor'];
 
     const [companies, setCompanies] = useState();
@@ -17,6 +17,7 @@ const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
     const fetchCompanies = async () => {
         try {
             const response = await fetch("http://localhost:8000/api/v1/organizations", {
+                // const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1/organizations', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
             const responseJson = await response.json();
             setCompanies(responseJson.organizations);
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching companies:", error);
         }
     }
 
@@ -98,8 +99,8 @@ const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
                 className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
 
             />
-                
-            
+
+
             {/* Location input */}
             <div className="relative">
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">
@@ -192,7 +193,7 @@ const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
 
             {/* Search button */}
             <button
-                onClick={() => onSearch()} // Just call onSearch, the inputValues are already in state
+                onClick={() => onSearch()}
                 className="button-bg rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 p-2"
             >
                 Search

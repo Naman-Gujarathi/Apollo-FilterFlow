@@ -3,30 +3,30 @@
 @tailwind utilities;
 
 .header-bg {
-    background-color: #2b6cb0; /* Tailwind's blue-700 */
+    background-color: #2b6cb0; 
   }
   
-  /* Custom styles for sidebar */
+  
   .sidebar-bg {
-    background-color: #edf2f7; /* Tailwind's gray-200 */
+    background-color: #edf2f7; 
   }
   
-  /* Custom styles for buttons */
+ 
   .button-bg {
-    background-color: #3182ce; /* Tailwind's blue-500 */
+    background-color: #3182ce; 
     color: #ffffff;
   }
   
   .button-bg:hover {
-    background-color: #2c5282; /* Tailwind's blue-800 */
+    background-color: #2c5282;
   }
   
-  /* Custom styles for the main content area */
+ 
   .main-bg {
-    background-color: #ffffff; /* White background for content */
+    background-color: #ffffff; 
   }
   
-  /* Custom styles for the table */
+ 
   .table-header-bg {
-    background-color: #ebf4ff; /* Tailwind's blue-100 */
+    background-color: #ebf4ff; 
   }

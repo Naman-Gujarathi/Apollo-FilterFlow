@@ -1,11 +1,11 @@
 import express from "express";
-import UserController from "../controller/index.js";
-import OrganizationController from "../controller/OrganizationController.js";
+import UserSearchController from "../controller/UserSearchController.js";
+import OrganizationController from "../controller/OrganizationSearchController.js";
 
 
 const router = express.Router();
 
-router.post('/api/v1', UserController)
+router.post('/api/v1', UserSearchController)
 
 router.get('/api/v1/organizations', OrganizationController)
 
