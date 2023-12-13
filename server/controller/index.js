@@ -1,5 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { isValidString } from "../utilities/index.js"
+// import faker from 'faker';
 dotenv.config();
 
 const UserController = (req, res) => {
@@ -14,13 +16,29 @@ const UserController = (req, res) => {
         "per_page": 30,    // Specify the number of rows per page
     };
 
+    console.log(requestPayload);
+
+    for (let key of Object.keys(requestPayload)) {
+        if (
+            key === "organization_ids" ||
+            key === "q_keywords" ||
+            key === "person_locations" ||
+            key === "person_titles"
+        ) {
+            if (!isValidString(requestPayload[key])) {
+                return res.status(400).json({
+                    message: "Invalid characters detected. Only letters, numbers, commas, hyphens and whitespaces allowed"
+                });
+            }
+        }
+    }
 
 
-    // Call the Apollo.io API
     axios.post(`${apolloUrl}?api_key=${apolloApiKey}`, requestPayload, {
         headers: { 'Content-Type': 'application/json' }
     })
         .then(apolloResponse => {
+            console.log(apolloResponse.data.people);
             // Filter function that checks if a person's current employment matches the filters
             const filterPeople = (people, filters) => {
                 return people.filter(person => {

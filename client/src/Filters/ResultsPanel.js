@@ -16,28 +16,28 @@ const ResultsPanel = ({ results, totalCount }) => {
     return (
         <div className="flex flex-col w-full h-full">
             {/* Results count section */}
-            <div className="flex justify-between items-center px-4 py-2 bg-gray-100 border-b">
+            <div className="flex justify-between items-center px-4 py-2 bg-blue-600 text-white">
                 <h2 className="text-lg font-semibold">Results</h2>
-                <div>Total Count: {formatCount(totalCount)}</div>
+                <span className="text-sm">Total Count: {formatCount(totalCount)}</span>
             </div>
 
             {/* Table section */}
-            <div className="flex-grow overflow-auto">
+            <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 10rem)' }}>
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="table-header-bg sticky bg-gray-50">
                         <tr>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Company</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phone</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employees</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact Location</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Industry</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Keywords</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Name</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Title</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Company</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Email</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Phone</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Employees</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Contact Location</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Industry</th>
+                            <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 bg-gray-50">Keywords</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white">
+                    <tbody className="divide-y divide-gray-200 bg-white">
                         {results.map((person, index) => (
                             <tr key={index}>
                                 <td className="px-3 py-2 whitespace-nowrap">{person?.name ?? 'N/A'}</td>

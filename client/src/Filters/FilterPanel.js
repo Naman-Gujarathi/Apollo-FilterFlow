@@ -1,17 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const FilterPanel = ({ onFilterChange, onSearch }) => {
-    const [inputValues, setInputValues] = useState({
-        location: '',
-        jobTitle: '',
-        company: '',
-    });
-
+const FilterPanel = ({ filters, onFilterChange, onSearch, setSearchInput }) => {
+ 
+    const [inputValues, setInputValues] = useState(filters);
 
 
     const locations = ['United States', 'Canada', 'United Kingdom', 'North America', 'Europe', 'Germany', 'Californial, US', 'San Francisco Bay Area', 'Russia', 'Texas, US', 'Greater New York City Area'];
-    const jobTitles = ['engineer', 'sales manager', 'product manager', 'studnet', 'director', 'software engineer', 'consultnat', 'professor'];
-    const companies = ['Google', 'Amazon', 'Microsoft', 'Linkedin', 'TED Conferences', 'Unilever', 'Forbes', 'Apple', 'IBM'];
+    const jobTitles = ['engineer', 'sales manager', 'product manager', 'student', 'director', 'software engineer', 'consultant', 'professor'];
+
+    const [companies, setCompanies] = useState();
+
+    useEffect(() => {
+        fetchCompanies();
+    }, []);
+
+    const fetchCompanies = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/api/v1/organizations", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const responseJson = await response.json();
+            setCompanies(responseJson.organizations);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -49,12 +65,15 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
 
     const handleInputChange = (name, value) => {
         setInputValues({ ...inputValues, [name]: value });
+        if (value.length === 0) {
+            setDropdowns(prevState => ({ ...prevState, [name]: false }));
+        }
         onFilterChange(name, value);
     };
 
     const selectDropdownItem = (name, value) => {
-        setInputValues({ ...inputValues, [name]: value });
-        onFilterChange(name, value);
+        setInputValues({ ...inputValues, [name]: name === "company" ? value.name : value });
+        onFilterChange(name, name === "company" ? value.id : value);
         setDropdowns(prevState => ({ ...prevState, [name]: false }));
     };
 
@@ -64,12 +83,23 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            onSearch(inputValues);
+            onSearch();
         }
     };
 
     return (
         <div className="flex flex-col space-y-4 mb-6" ref={filterPanelRef}>
+            {/*Search Bar */}
+            <input
+                type="text"
+                placeholder="Search ..."
+                onChange={(e) => handleInputChange('searchQuery', e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && onSearch()}
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+
+            />
+                
+            
             {/* Location input */}
             <div className="relative">
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">
@@ -83,7 +113,7 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
                     onKeyPress={handleKeyPress}
                     onFocus={() => toggleDropdown('location')}
                     autoComplete="off"
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
                 {dropdowns.location && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-scroll">
@@ -113,7 +143,7 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
                     onKeyPress={handleKeyPress}
                     onFocus={() => toggleDropdown('jobTitle')}
                     autoComplete="off"
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
                 {dropdowns.jobTitle && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-scroll">
@@ -143,17 +173,17 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
                     onKeyPress={handleKeyPress}
                     onFocus={() => toggleDropdown('company')}
                     autoComplete="off"
-                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
                 />
                 {dropdowns.company && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-scroll">
-                        {companies.map((company, index) => (
+                        {companies && companies.map((company, index) => (
                             <div
                                 key={index}
                                 className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                                 onClick={() => selectDropdownItem('company', company)}
                             >
-                                {company}
+                                {company.name}
                             </div>
                         ))}
                     </div>
@@ -162,8 +192,8 @@ const FilterPanel = ({ onFilterChange, onSearch }) => {
 
             {/* Search button */}
             <button
-                onClick={() => onSearch(inputValues)}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={() => onSearch()} // Just call onSearch, the inputValues are already in state
+                className="button-bg rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 p-2"
             >
                 Search
             </button>
