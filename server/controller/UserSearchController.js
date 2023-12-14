@@ -16,8 +16,6 @@ const UserSearchController = (req, res) => {
         "per_page": 30,
     };
 
-
-
     // Validating the input for specific fields
     for (let key of Object.keys(requestPayload)) {
         if (
@@ -34,46 +32,19 @@ const UserSearchController = (req, res) => {
         }
     }
 
+    console.log("requestPayload:", requestPayload)
+    console.log(`url =  ${apolloUrl}?api_key=${apolloApiKey}`)
+
     // Making a post request to the Apollo API and handling the response
     axios.post(`${apolloUrl}?api_key=${apolloApiKey}`, requestPayload, {
         headers: { 'Content-Type': 'application/json' }
     })
         .then(apolloResponse => {
-            // Additional filtering of the response data based on specific criteria
-            const filterPeople = (people, filters) => {
-                return people.filter(person => {
-
-                    return Object.keys(filters).every(key => {
-                        if (!filters[key]) {
-                            return true;
-                        }
-                        if (key === 'company' || key === 'jobTitle') {
-
-                            const currentEmployment = person.employment_history.find(e => e.current);
-                            if (!currentEmployment) return false;
-                            return key === 'company' ? currentEmployment.organization_name === filters[key] : currentEmployment.title === filters[key];
-                        } else {
-
-                            return filters[key].includes(person[key]);
-                        }
-                    });
-                });
-            };
-
-
-            const filters = {
-                country: requestPayload.country || '',
-                state: requestPayload.state || '',
-                city: requestPayload.city || '',
-                company: requestPayload.company || '',
-                jobTitle: requestPayload.jobTitle || '',
-            };
-
-
-            const filteredPeople = filterPeople(apolloResponse.data.people, filters);
-
-
-            res.json({ ...apolloResponse.data, people: filteredPeople });
+            console.log("apolloResponse.data.people.length ", apolloResponse.data.people.length)
+            if (apolloResponse.data.people.length === 0) {
+                apolloResponse.data.people = apolloResponse.data.contacts;
+            }
+            res.json({ ...apolloResponse.data, people: apolloResponse.data.people });
         })
         .catch(error => {
 

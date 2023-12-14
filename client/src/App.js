@@ -7,7 +7,6 @@ import { handleSearch } from './Components/SearchService';
 
 const App = () => {
   // State management for user inputs and search results
-  const [userQuery, setUserQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
     jobTitle: '',
@@ -51,7 +50,6 @@ const App = () => {
             onSearch={() => executeSearch()}
             onDropdown={toggleDropdownVisibility}
             dropdowns={dropdowns}
-            setUserQuery={setUserQuery}
           />
         </aside>
         <main className="flex-1 overflow-y-auto p-4">

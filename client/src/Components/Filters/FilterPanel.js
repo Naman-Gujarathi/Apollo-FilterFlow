@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const FilterPanel = ({ filters, onFilterChange, onSearch, setUserQuery }) => {
+const FilterPanel = ({ filters, onFilterChange, onSearch }) => {
 
     const [inputValues, setInputValues] = useState(filters);
 
 
-    const locations = ['United States', 'Canada', 'India', 'United Kingdom', 'North America', 'Europe', 'Germany', 'Californial, US', 'San Francisco Bay Area', 'Russia', 'Texas, US', 'Greater New York City Area'];
-    const jobTitles = ['engineer', 'sales manager', 'product manager', 'student', 'director', 'software engineer', 'consultant', 'professor'];
+    const locations = ['United States', 'Canada', 'India', 'United Kingdom', 'North America', 'Europe', 'Germany', 'California, US', 'San Francisco Bay Area', 'Russia', 'Texas, US', 'Greater New York City Area'];
+    const jobTitles = ['engineer', 'sales manager', 'product manager', 'student', 'director', 'consultant', 'professor'];
 
     const [companies, setCompanies] = useState();
 
@@ -16,8 +16,8 @@ const FilterPanel = ({ filters, onFilterChange, onSearch, setUserQuery }) => {
 
     const fetchCompanies = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/v1/organizations", {
-                // const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1/organizations', {
+
+            const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1/organizations', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

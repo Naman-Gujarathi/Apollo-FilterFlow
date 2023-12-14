@@ -28,7 +28,7 @@ export const handleSearch = async (filters, setSearchResults, setTotalResultsCou
   if (filters.jobTitle.length > 0) {
     payload.person_titles = [filters.jobTitle.trim()];
   }
-
+  console.log("payload= ", payload)
   // Alert if no filters are applied
   if (Object.keys(payload).length === 0) {
     setSearchResults([]);
@@ -38,8 +38,8 @@ export const handleSearch = async (filters, setSearchResults, setTotalResultsCou
 
   // Perform the search request
   try {
-    const response = await fetch('http://localhost:8000/api/v1', {
-      // const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1', {
+
+    const response = await fetch('http://ec2-54-87-30-204.compute-1.amazonaws.com:8000/api/v1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,12 +47,15 @@ export const handleSearch = async (filters, setSearchResults, setTotalResultsCou
       body: JSON.stringify(payload),
     });
 
+
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
 
+    console.log('Response Data:', data)
 
     // Process response data
     setSearchResults(data.people || []);
